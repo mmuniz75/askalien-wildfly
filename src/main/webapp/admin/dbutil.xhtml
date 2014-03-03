@@ -1,0 +1,31 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+   xmlns:h="http://java.sun.com/jsf/html">
+
+<h:head>
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+</h:head>
+
+<body>
+	
+	<h:form id="formCountries">
+		<h:commandButton styleClass="button" id="contryButton" value="Set Contries in Questions" action="#{populateDBService.setCountries}"  />
+	</h:form>
+	<br/>
+	<h:form id="formCountries2">
+		<h:commandButton styleClass="button" id="populateContryButton" value="Start Country data" action="#{populateDBService.populateCountryTable}"  />
+	</h:form>
+	<br/>
+	<h:form id="formCountries3">
+		<h:commandButton styleClass="button" id="deleteMyQuestionButton" value="Delete my questions" action="#{populateDBService.deleteMyQuestions}"  />
+	</h:form>
+	<br>
+	#{populateDBService.updates} rows updated
+	</br>
+	
+	
+	
+				
+</body>
+</html>

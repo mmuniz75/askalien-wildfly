@@ -1,0 +1,84 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+   xmlns:ui="http://java.sun.com/jsf/facelets"
+   xmlns:h="http://java.sun.com/jsf/html"
+   xmlns:f="http://java.sun.com/jsf/core"
+   xmlns:a4j="http://richfaces.org/a4j">
+
+<h:head>
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+</h:head>
+
+<body>
+	<f:metadata>
+		<f:viewParam name="edit" value="#{questionService.objectID}"/>
+	</f:metadata>
+	<ui:composition template="../template/template.xhtml">
+		<ui:define name="menu">
+			<ui:include src="menu.xhtml">
+    			<ui:param name="current" value="questions"/>
+			</ui:include>
+		</ui:define>
+		
+		<ui:define name="content">
+			<h2>Question Detail</h2>
+			<br/>
+			<h:form id="formDetail">
+			    <p>			
+					<label>ID</label>
+					<h:inputText value="#{questionService.object.id}" size="10" disabled="true" />
+					<label>Creation Date</label>
+					<h:inputText value="#{questionService.object.creationDate}" size="20" disabled="true" >
+						<f:convertDateTime pattern="dd/MM/yyyy kk:mm" timeZone="America/Sao_Paulo" />
+					</h:inputText>
+					<label>IP</label>
+					<h:inputText value="#{questionService.object.ip}" size="20" disabled="true" />
+					<label>Country</label>
+					<h:inputText value="#{questionService.object.country}" size="20" disabled="true" />
+					<label>Creator</label>
+					<h:inputText value="#{questionService.object.creator}" size="20" disabled="true" />
+					<label>Email</label>
+					<h:inputText value="#{questionService.object.email}" size="20" disabled="true" />
+					<label>Ask Question</label>
+					<h:inputTextarea value="#{questionService.object.text}" cols="60" rows="3" disabled="true" />
+					<br/>
+				</p>
+			</h:form>
+			
+			<h2>Question Found</h2>
+						
+				<h3><font color="#2180BC">#{questionService.object.answer.id} - #{questionService.object.answer.subject}</font></h3>	
+				<h:panelGroup id="panelURL" rendered="#{not empty questionService.object.answer.url}" >			
+					<p><u><a href="#{questionService.object.answer.url}" target="_blank" >See this link</a></u></p>
+				</h:panelGroup>		
+				<blockquote><p>#{questionService.object.answer.content}</p></blockquote>
+				
+				<p>
+				<font color="gray">
+					<i>
+					   <h:outputText value="From video #{questionService.object.answer.video.number} # " rendered="#{questionService.object.answer.video.number ge 0}" />
+					   &nbsp;-&nbsp;
+					   <h:outputText value="#{questionService.object.answer.video.creationDate}" rendered="#{not empty questionService.object.answer.video.creationDate}" >
+					   		<f:convertDateTime pattern="MM/dd/yyyy" />
+					   </h:outputText>	
+					</i>
+				</font>
+				</p>
+				
+				<h:panelGroup rendered="#{not empty questionService.object.feedback}">	
+					<h2>Feed Back</h2>
+					<blockquote><p>#{questionService.object.feedback}</p></blockquote>
+				</h:panelGroup>
+				
+				<h:form id="formAnswer" styleClass="searchform">	
+					<p>
+						<h:commandButton styleClass="button" id="questionButton" value="Back" action="questions"  />
+					</p>
+				</h:form>
+				
+			
+		</ui:define>
+	</ui:composition>	
+</body>
+</html>

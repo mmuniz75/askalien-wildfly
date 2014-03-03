@@ -1,0 +1,49 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+   xmlns:ui="http://java.sun.com/jsf/facelets"
+   xmlns:h="http://java.sun.com/jsf/html"
+   xmlns:f="http://java.sun.com/jsf/core"
+   xmlns:a4j="http://richfaces.org/a4j">
+
+<h:head>
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+</h:head>
+
+<body>
+	<ui:composition template="../template/template.xhtml">
+		<ui:define name="menu">
+			<ui:include src="menu.xhtml">
+    			<ui:param name="current" value="listanswers"/>
+			</ui:include>
+		</ui:define>
+		
+		<ui:define name="content">
+				<h2>Answers</h2>
+				<h:form id="formAnswers" style="width:95%">
+				<br/>
+				&nbsp;&nbsp;&nbsp;&nbsp;ID		
+				<h:inputText styleClass="textbox" id="inputId" value="#{answerService.filter}" size="5" >
+					<f:ajax event="keyup" render="tabAnswers" />
+				</h:inputText>
+				<br/>
+				 <h:dataTable id="tabAnswers" var="_answer" value="#{answerService.list}" rowClasses="row-a,row-b" style="width:95%">
+			         <h:column>
+			            <f:facet name="header">Nº</f:facet>
+			             #{_answer.id}
+			            </h:column>
+			         <h:column>
+			            <f:facet name="header">Question</f:facet>
+			            #{_answer.subject}
+			         </h:column>
+			         <h:column rendered="#{facesContext.externalContext.isUserInRole('admin')}" >
+			          	<h:link outcome="answer" value="Edit"  >
+							<f:param name="edit" value="#{_answer.id}" includeViewParams="true" />
+						</h:link>	
+			         </h:column>
+			      </h:dataTable>
+			    </h:form>  
+		</ui:define>
+	</ui:composition>	
+</body>
+</html>

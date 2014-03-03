@@ -1,0 +1,100 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+   xmlns:ui="http://java.sun.com/jsf/facelets"
+   xmlns:h="http://java.sun.com/jsf/html"
+   xmlns:f="http://java.sun.com/jsf/core"
+   xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+   xmlns:p="http://primefaces.org/ui"
+   >
+
+<body>
+	<f:metadata>
+		<f:viewParam name="answerId" value="#{questionService.answerId}"/>
+	</f:metadata>
+	<ui:composition template="../template/template.xhtml">
+		<ui:define name="menu">
+			<ui:include src="menu.xhtml">
+    			<ui:param name="current" value="questions"/>
+			</ui:include>
+		</ui:define>
+		
+		<ui:define name="content">
+		
+				<h2 id="countQuestion" />
+				
+				<h:form id="formFeedBacks" style="width:95%" styleClass="searchform">
+				<br/>
+				&nbsp;&nbsp;
+				<h:selectBooleanCheckbox id="feedbackCkeckBox" value="#{questionService.justFeedback}" >
+					<f:ajax event="click" render="panelQuestions" />
+				</h:selectBooleanCheckbox>
+				Just with feedback
+				&nbsp;&nbsp;&nbsp;&nbsp;
+				<h:selectBooleanCheckbox id="justmonthCkeckBox" value="#{questionService.justThisMonth}" >
+					<f:ajax event="click" render="panelCheckMonth" />
+				</h:selectBooleanCheckbox>
+				Just This Month
+				<br/>
+				<br/>
+				<h:panelGroup id="panelCheckMonth">
+					&nbsp;&nbsp;&nbsp;
+					Start Date:
+					<p:calendar value="#{questionService.startDate}" id="popupCal1"  />
+					&nbsp;&nbsp;
+					End Date:
+					<p:calendar value="#{questionService.endDate}" id="popupCal2" />
+					&nbsp;&nbsp;
+					<h:commandButton styleClass="button" id="addFilterDate" value="Filter Dates" >
+	   		        	<f:ajax event="keyup" render="panelQuestions" />
+	   		        </h:commandButton>
+					<br/>
+					<br/>
+					&nbsp;&nbsp;&nbsp;
+					IP		
+					<h:inputText  id="inputIP" value="#{questionService.ipFilter}" size="20" >
+						<f:ajax event="keyup" render="panelQuestions" />
+					</h:inputText>
+					&nbsp;&nbsp;&nbsp;&nbsp;
+					Question		
+					<h:inputText  id="inputQuestion" value="#{questionService.questionFilter}" size="50" >
+						<f:ajax event="keyup" render="panelQuestions" />
+					</h:inputText>
+					<br/>
+					<h:panelGroup id="panelQuestions">
+					 <h:dataTable id="tabQuestions" var="_question" value="#{questionService.list}" rowClasses="row-a,row-b" style="width:95%" >
+					 	 <h:column>
+				            <f:facet name="header">Date</f:facet>
+				             <h:outputText value="#{_question.creationDate}" >
+									<f:convertDateTime pattern="dd/MM/yyyy kk:mm" timeZone="America/Sao_Paulo" />
+							 </h:outputText>
+				         </h:column>
+				         <h:column>
+				            <f:facet name="header">IP</f:facet>
+				             #{_question.ip}
+				         </h:column>
+				         <h:column>
+				            <f:facet name="header">Country&nbsp;&nbsp;&nbsp;</f:facet>
+				            #{_question.country}&nbsp;&nbsp;&nbsp;
+				         </h:column>
+				         <h:column>
+				            <f:facet name="header">Question</f:facet>
+				             #{_question.text}
+				            </h:column>
+				         <h:column>
+				          	<h:link outcome="question_detail" value="Detail"  >
+								<f:param name="edit" value="#{_question.id}" includeViewParams="true" />
+							</h:link>	
+				         </h:column>
+				      </h:dataTable>
+				      <script>
+				        answer = ' <h:outputText value=" for Answer number : #{questionService.answerId}" rendered="#{questionService.answerId gt 0}" />';
+					   	document.getElementById("countQuestion").innerHTML = "#{fn:length(questionService.list)} Questions " + answer; 
+					   </script>
+			     </h:panelGroup>
+			  </h:panelGroup> 
+		   </h:form>
+		</ui:define>
+	</ui:composition>	
+</body>
+</html>

@@ -1,0 +1,61 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+   xmlns:ui="http://java.sun.com/jsf/facelets"
+   xmlns:h="http://java.sun.com/jsf/html"
+   xmlns:f="http://java.sun.com/jsf/core"
+   xmlns:a4j="http://richfaces.org/a4j">
+
+<h:head>
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+</h:head>
+
+<body>
+	<ui:composition template="../template/template.xhtml">
+		<ui:define name="menu">
+			<ui:include src="menu.xhtml">
+    			<ui:param name="current" value="statistics"/>
+			</ui:include>
+		</ui:define>
+		
+		<ui:define name="content">
+				<h2>Statistics</h2>
+				
+			 	<font color="#2180BC" size="2">
+			 		<b>
+					<table border="0">
+						<tr>	
+							<td>Total Questions</td><td> : #{questionService.countQuestions}</td>
+						</tr>
+						<tr>
+							<td>Total Frequent Users</td><td> : #{questionService.countFrequentUsers}</td>
+						</tr>
+					 	<tr>
+							<td>Total Users</td><td> : #{questionService.countUsers}</td>
+						</tr>
+					 	<tr>
+							<td>Total Countries</td><td> : #{questionService.countCountries}</td>
+						</tr>
+						<tr>
+							<td>Total Answers</td><td> : #{answerService.countAnswers}</td>
+						</tr>
+					</table>
+					</b>
+				</font>  
+			
+				<h:form id="formAnswers" >
+				 <h:dataTable id="tabTopAnwers" var="_country" value="#{countryService.countryQuestions}" rowClasses="row-a,row-b" style="width:50%">
+			         <h:column>
+			            <f:facet name="header">Country</f:facet>
+			             #{_country.country}
+			            </h:column>
+			         <h:column>
+			            <f:facet name="header">Number of questions</f:facet>
+			            #{_country.countQuestions}
+			         </h:column>
+			      </h:dataTable>
+			    </h:form>  
+		</ui:define>
+	</ui:composition>	
+</body>
+</html>

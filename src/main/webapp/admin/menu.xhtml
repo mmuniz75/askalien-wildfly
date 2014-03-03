@@ -1,0 +1,62 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+   xmlns:ui="http://java.sun.com/jsf/facelets"
+   xmlns:h="http://java.sun.com/jsf/html"
+   xmlns:f="http://java.sun.com/jsf/core"
+   xmlns:a4j="http://richfaces.org/a4j"
+   xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+<h:head>
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+</h:head>
+<body>
+	<ul>
+		<c:if test="#{current eq 'questions'}">
+			<li id="current"><h:link  outcome="questions" value="List Question"><f:param name="answerId" value="0" includeViewParams="true" /></h:link></li>
+		</c:if>
+		<c:if test="#{current ne 'questions'}">
+			<li><h:link  outcome="questions" value="List Question"><f:param name="answerId" value="0" includeViewParams="true" /></h:link></li>
+		</c:if>
+
+		<c:if test="#{current eq 'listanswers'}">
+			<li id="current"><h:link  outcome="listanswers" value="List Answers"/></li>
+		</c:if>
+		<c:if test="#{current ne 'listanswers'}">
+			<li><h:link  outcome="listanswers" value="List Answers"/></li>
+		</c:if>	
+		
+		<h:panelGroup rendered="#{facesContext.externalContext.isUserInRole('admin')}">
+			<c:if test="#{current eq 'answer'}">
+				<li id="current"><h:link  outcome="answer" value="Create Answer"><f:param name="edit" value="0" includeViewParams="true" /></h:link></li>
+			</c:if>	
+			<c:if test="#{current ne 'answer'}">
+				<li><h:link  outcome="answer" value="Create Answer"><f:param name="edit" value="0" includeViewParams="true" /></h:link></li>
+			</c:if>
+		</h:panelGroup>
+		
+		<c:if test="#{current eq 'topanswers'}">
+			<li id="current"><h:link  outcome="topanswers" value="Top Answers"/></li>
+		</c:if>
+		<c:if test="#{current ne 'topanswers'}">
+			<li><h:link  outcome="topanswers" value="Top Answers"/></li>
+		</c:if>
+		
+		<c:if test="#{current eq 'videos'}">
+			<li id="current"><h:link  outcome="videos" value="Videos"/></li>
+		</c:if>
+		<c:if test="#{current ne 'videos'}">
+			<li><h:link  outcome="videos" value="Videos"/></li>
+		</c:if>
+				
+		<c:if test="#{current eq 'statistics'}">
+			<li id="current"><h:link  outcome="statistics" value="Statistics"/></li>
+		</c:if>
+		<c:if test="#{current ne 'statistics'}">
+			<li><h:link  outcome="statistics" value="Statistics"/></li>
+		</c:if>
+		
+		
+	</ul>	
+</body>	
+</html>

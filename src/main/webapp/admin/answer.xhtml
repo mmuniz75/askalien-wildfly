@@ -1,0 +1,62 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+   xmlns:ui="http://java.sun.com/jsf/facelets"
+   xmlns:h="http://java.sun.com/jsf/html"
+   xmlns:f="http://java.sun.com/jsf/core"
+   xmlns:a4j="http://richfaces.org/a4j">
+
+<h:head>
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+</h:head>
+
+<body>
+	<f:metadata>
+		<f:viewParam name="edit" value="#{answerService.objectID}"/>
+	</f:metadata>
+	<ui:composition template="../template/template.xhtml">
+		<ui:define name="menu">
+			<ui:include src="menu.xhtml">
+    			<ui:param name="current" value="answer"/>
+			</ui:include>
+		</ui:define>
+		
+		<ui:define name="content">
+			<h:panelGroup rendered="#{facesContext.externalContext.isUserInRole('admin')}" >
+				<font size="2" color="red"><h:messages /></font>
+				<h:panelGroup rendered="#{not empty answerService.message}">
+					<p class="post-footer align-left">					
+						<span class="info">#{message[answerService.message]}</span>	
+					</p>				
+				</h:panelGroup>
+				<h:panelGroup rendered="#{not empty answerService.error}">
+					<p class="post-footer align-left">					
+						<span class="error">#{message[answerService.error]}</span>	
+					</p>				
+				</h:panelGroup>
+				<h2>Answer Register</h2>
+				<br/>
+				<h:form id="formAnswer">
+				    <p>			
+					<label>ID</label>
+					<h:inputText id="inputid" value="#{answerService.object.id}" size="10" disabled="true" />
+					<label>From Video Number</label>
+					<h:inputText id="inputVideo" value="#{answerService.object.video.number}" required="true" size="5" requiredMessage="Enter the video number"/>
+					<label>Relate Web Link</label>
+					<h:inputText id="inputURL" value="#{answerService.object.url}" required="false" size="70" />
+					<label>Question</label>
+					<h:inputText id="inputSubject" value="#{answerService.object.subject}" required="true" size="70" requiredMessage="Enter the question"/>
+					<label>Answer</label>
+					<h:inputTextarea id="inputAnser" value="#{answerService.object.content}" required="true" cols="60" rows="15" requiredMessage="Enter the Answer" />
+					<br />	
+					<h:commandButton styleClass="button" id="saveButton" value="Create" action="#{answerService.save}" rendered="#{empty answerService.object.id}"  >
+						<f:param name="edit" value="0" includeViewParams="true" />
+					</h:commandButton>	
+					<h:commandButton styleClass="button" id="alterButton" value="Update" action="#{answerService.update}" rendered="#{param.edit ne 0}" />
+					</p>
+				</h:form>
+			</h:panelGroup>	
+		</ui:define>
+	</ui:composition>	
+</body>
+</html>

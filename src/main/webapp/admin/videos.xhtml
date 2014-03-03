@@ -1,0 +1,86 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+   xmlns:ui="http://java.sun.com/jsf/facelets"
+   xmlns:h="http://java.sun.com/jsf/html"
+   xmlns:f="http://java.sun.com/jsf/core"
+   xmlns:a4j="http://richfaces.org/a4j"
+   xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+</h:head>
+
+<body>
+	<ui:composition template="../template/template.xhtml">
+		<ui:define name="menu">
+			<ui:include src="menu.xhtml">
+    			<ui:param name="current" value="videos"/>
+			</ui:include>
+		</ui:define>
+		
+		<ui:define name="content">
+		<h:panelGroup rendered="#{facesContext.externalContext.isUserInRole('admin')}" >
+				
+			
+				<h2>Videos</h2>
+				<h:form id="formAnswers" style="width:95%">
+				<br/>
+			
+				<h:inputHidden id="inputId" value="#{videoService.object.id}" />
+				Number <h:inputText id="inputNumber" value="#{videoService.object.number}" />
+			    Date <p:calendar value="#{videoService.object.creationDate}" id="popupCal" />
+			    &nbsp;
+			    <h:commandButton styleClass="button" id="saveButton" value="Save" action="#{videoService.save}" rendered="#{empty videoService.object.id}"  >
+   		        	<f:ajax event="keyup" render="tabVideos" />
+   		        </h:commandButton>
+   		        <h:commandButton styleClass="button" id="addUpdate" value="Update" action="#{videoService.update}" rendered="#{not empty videoService.object.id}" >
+   		        	<f:ajax event="keyup" render="tabVideos" />
+   		        </h:commandButton>
+   		        &nbsp;&nbsp;&nbsp;
+   		        <h:commandButton styleClass="button" id="addButton" value="Add" action="#{videoService.add}" rendered="#{not empty videoService.object.id}" >
+   		        	<f:ajax event="keyup" render="tabVideos" />
+   		        </h:commandButton>
+   		        
+				<br/>
+			
+				<h:panelGroup id="tabVideos">
+					<font size="2" color="red"><h:messages /></font>
+					<h:panelGroup rendered="#{not empty videoService.message}">
+						<p class="post-footer align-left">					
+							<span class="info">#{message[videoService.message]}</span>	
+						</p>				
+					</h:panelGroup>
+					<h:panelGroup rendered="#{not empty videoService.error}">
+						<p class="post-footer align-left">					
+							<span class="error">#{message[videoService.error]}</span>	
+						</p>				
+					</h:panelGroup>
+								
+					 <h:dataTable id="tabAnswers" var="_video" value="#{videoService.list}" rowClasses="row-a,row-b" style="width:95%">
+				         <h:column>
+				            <f:facet name="header">Nº</f:facet>
+				             #{_video.number}
+				            </h:column>
+				         <h:column>
+				            <f:facet name="header">Date</f:facet>
+				            <h:outputText value="#{_video.creationDate}" >
+									<f:convertDateTime pattern="dd/MM/yyyy" />
+							 </h:outputText>
+				         </h:column>
+				         <h:column >
+				          	<h:commandLink outcome="videos" value="Edit" id="saveVideo">
+				          		<f:setPropertyActionListener target="#{videoService.object.id}" value="#{_video.id}"/>
+				          		<f:setPropertyActionListener target="#{videoService.object.number}" value="#{_video.number}"/>
+				          		<f:setPropertyActionListener target="#{videoService.object.creationDate}" value="#{_video.creationDate}"/>
+							</h:commandLink>	
+				         </h:column>
+				      </h:dataTable>
+			  </h:panelGroup>
+			  
+		</h:form>  
+		</h:panelGroup>	    
+		</ui:define>
+	</ui:composition>	
+</body>
+</html>
