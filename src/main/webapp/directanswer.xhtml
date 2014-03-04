@@ -1,0 +1,49 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+   xmlns:ui="http://java.sun.com/jsf/facelets"
+   xmlns:h="http://java.sun.com/jsf/html"
+   xmlns:f="http://java.sun.com/jsf/core"
+   xmlns:a4j="http://richfaces.org/a4j">
+
+<h:head>
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+</h:head>
+
+<body>
+	<f:metadata>
+		<f:viewParam name="load" value="#{answerService.objectID}"/>
+	</f:metadata>
+	<ui:composition template="template/template.xhtml">
+		
+		<ui:define name="menu">
+		</ui:define>
+		
+		<ui:define name="content">
+								
+				<h3><font color="#2180BC">#{answerService.object.id} - #{answerService.object.subject}</font></h3>	
+				<h:panelGroup id="panelURL" rendered="#{not empty answerService.object.url}" >			
+					<p><u><a href="#{answerService.object.url}" target="_blank" >See this link</a></u></p>
+				</h:panelGroup>		
+				<blockquote><p>#{answerService.object.content}</p></blockquote>
+				
+				<p>
+				<font color="gray">
+					<i>
+					   <h:outputText value="From video #{answerService.object.video.number} # " rendered="#{answerService.object.video.number ge 0}" />
+					   &nbsp;-&nbsp;
+					   <h:outputText value="#{answerService.object.video.creationDate}" rendered="#{not empty answerService.object.video.creationDate}" >
+					   		<f:convertDateTime pattern="MM/dd/yyyy" />
+					   </h:outputText>	
+					</i>
+				</font>
+				</p>
+				<br/><br/>
+				<div style="text-align:center">			
+				<h1><u><a href="ask/main.jsf" >Click Here for ask more questions</a></u></h1>
+				</div>
+				<br/><br/>			
+		</ui:define>
+	</ui:composition>	
+</body>
+</html>

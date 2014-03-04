@@ -143,10 +143,12 @@ public class AnswerService extends Service{
 		reset();
 		this.object = new Answer();
 		StringBuilder sql = new StringBuilder();
-		sql.append("select obj from Answer obj ");
+		sql.append("select obj from Answer obj");
 		
 		if(filter!=null && filter > 0 )
-			sql.append("where id=" + filter);
+			sql.append(" where id=" + filter);
+		
+		sql.append(" order by obj.id");
 
 		return em.createQuery(sql.toString(),Answer.class).getResultList();
 	}
