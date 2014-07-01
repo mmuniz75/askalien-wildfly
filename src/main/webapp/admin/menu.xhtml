@@ -56,6 +56,12 @@
 			<li><h:link  outcome="statistics" value="Statistics"/></li>
 		</c:if>
 		
+		<c:if test="#{current eq 'usage'}">
+			<li id="current"><h:link  outcome="usage" value="Usage"/></li>
+		</c:if>
+		<c:if test="#{current ne 'usage'}">
+			<li><h:link  outcome="usage" value="Usage"/></li>
+		</c:if>
 		
 	</ul>	
 </body>	

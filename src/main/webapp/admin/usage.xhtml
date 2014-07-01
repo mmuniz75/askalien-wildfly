@@ -1,0 +1,67 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+   xmlns:ui="http://java.sun.com/jsf/facelets"
+   xmlns:h="http://java.sun.com/jsf/html"
+   xmlns:f="http://java.sun.com/jsf/core"
+   xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+   xmlns:p="http://primefaces.org/ui"
+   >
+
+<body>
+	
+	<ui:composition template="../template/template.xhtml">
+		<ui:define name="menu">
+			<ui:include src="menu.xhtml">
+    			<ui:param name="current" value="usage"/>
+			</ui:include>
+		</ui:define>
+		
+		<ui:define name="content">
+				<h:form id="formLinks" style="width:95%" styleClass="searchform">
+	
+				<f:view contentType="text/html">
+					<f:event type="preRenderComponent" listener="#{usageService.updateUsage}" />
+				</f:view>
+								
+				<h:panelGroup id="panelCheckMonth">
+					&nbsp;&nbsp;&nbsp;
+					Year:
+					<h:selectOneMenu value="#{usageService.year}">
+   						<f:selectItems value="#{usageService.years}" />
+   						<f:ajax event="change" render="panelUsage" />
+   					</h:selectOneMenu>
+					&nbsp;&nbsp;
+					<br/>
+					<h:panelGroup id="panelUsage">
+					 <h:dataTable id="tabQuestions" var="_usage" value="#{usageService.usageFromYear}" rowClasses="row-a,row-b" columnClasses="nameColumn, numberColumn, numberColumn,numberColumn" style="width:95%" >
+					 	 <h:column>
+				            <f:facet name="header">Month</f:facet>
+				             #{_usage.monthName}
+				         </h:column>
+				         <h:column>
+				            <f:facet name="header">New Users</f:facet>
+				            <font color="red">
+				            	#{_usage.newUsers}
+				            </font>
+				         </h:column>
+				         <h:column>
+				            <f:facet name="header">Old Users</f:facet>
+				             	#{_usage.oldUsers}
+				         </h:column>
+				         <h:column>
+				            <f:facet name="header">Total of Users</f:facet>
+				            <font color="blue">
+				             	#{_usage.numberUsers}
+				             </font>
+				         </h:column>
+				     </h:dataTable>
+			     </h:panelGroup>
+			  </h:panelGroup>
+			  <br/>  
+		   </h:form>
+		   
+		</ui:define>
+	</ui:composition>	
+</body>
+</html>
