@@ -35,8 +35,7 @@ public class Answer implements Serializable,Model,Comparable<Answer>{
 	@Column(length=200)
 	private String url;
 	
-	@Basic(fetch=FetchType.LAZY)
-	@ManyToOne @JoinColumn(name="videoNumber")
+	@ManyToOne(fetch=FetchType.LAZY) @JoinColumn(name="videoNumber")
 	private Video video;
 
 	public String getUrl() {

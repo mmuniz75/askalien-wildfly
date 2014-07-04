@@ -22,7 +22,10 @@
 		<ui:define name="content">
 		<h:panelGroup rendered="#{facesContext.externalContext.isUserInRole('admin')}" >
 				
-			
+				<f:view contentType="text/html">
+					<f:event type="preRenderView" listener="#{videoService.resetList}" />
+				</f:view>
+				
 				<h2>Videos</h2>
 				<h:form id="formAnswers" style="width:95%">
 				<br/>

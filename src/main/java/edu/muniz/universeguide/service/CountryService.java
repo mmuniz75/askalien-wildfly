@@ -5,12 +5,12 @@ import java.net.URL;
 import java.util.List;
 
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.SessionScoped;
+import javax.faces.bean.RequestScoped;
 
 import edu.muniz.universeguide.model.Country;
 
 @ManagedBean
-@SessionScoped
+@RequestScoped
 public class CountryService extends Service {
 	
 	
@@ -164,17 +164,20 @@ public class CountryService extends Service {
     }
 	
 	public List<Country> getCountryQuestions() {
-		reset();
-		this.object = new Country();
-		
-		StringBuilder sql = new StringBuilder();
-		sql.append("SELECT new edu.muniz.universeguide.model.Country(question.country,count(question.country)) ");
-		sql.append("FROM Question question ");
-		sql.append("WHERE question.country NOT IN ('','undefined','Unknown Country') ");
-		sql.append("GROUP BY question.country ");
-		sql.append("ORDER BY 2 desc");
-		
-		return em.createQuery(sql.toString(),Country.class).getResultList();
+		if(list ==null) {
+			reset();
+			this.object = new Country();
+			
+			StringBuilder sql = new StringBuilder();
+			sql.append("SELECT new edu.muniz.universeguide.model.Country(question.country,count(question.country)) ");
+			sql.append("FROM Question question ");
+			sql.append("WHERE question.country NOT IN ('','undefined','Unknown Country') ");
+			sql.append("GROUP BY question.country ");
+			sql.append("ORDER BY 2 desc");
+			
+			list = em.createQuery(sql.toString(),Country.class).getResultList();
+		}
+		return list;
 	}
 
 }

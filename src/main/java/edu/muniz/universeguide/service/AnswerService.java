@@ -8,17 +8,16 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.SessionScoped;
+import javax.faces.bean.RequestScoped;
 import javax.inject.Inject;
 
 import edu.muniz.universeguide.model.Answer;
-import edu.muniz.universeguide.model.Question;
 import edu.muniz.universeguide.model.Video;
 import edu.muniz.universeguide.util.IndexingHelper;
 import edu.muniz.universeguide.util.LuceneHelper;
 
 @ManagedBean
-@SessionScoped
+@RequestScoped
 public class AnswerService extends Service{
 	
 	@Inject
@@ -62,8 +61,17 @@ public class AnswerService extends Service{
 		if(objectID==0){
 			reset();
 			this.object = new Answer();
-		}else
-			super.setObjectID(objectID);
+		}else{
+			try{
+				utx.begin();
+				super.setObjectID(objectID);
+				((Answer)this.object).getVideo().getNumber();
+				utx.commit();
+			}catch(Exception ex){
+				ex.printStackTrace();
+				error = ex.getMessage();
+			}
+		}	
 		
 	}
 
@@ -140,35 +148,42 @@ public class AnswerService extends Service{
 
 	
 	public List<Answer> getList() {
-		reset();
-		this.object = new Answer();
-		StringBuilder sql = new StringBuilder();
-		sql.append("select obj from Answer obj");
-		
-		if(filter!=null && filter > 0 )
-			sql.append(" where id=" + filter);
-		
-		sql.append(" order by obj.id");
-
-		return em.createQuery(sql.toString(),Answer.class).getResultList();
+		if(list == null){
+			reset();
+			this.object = new Answer();
+			StringBuilder sql = new StringBuilder();
+			sql.append("select obj from Answer obj");
+			
+			if(filter!=null && filter > 0 )
+				sql.append(" where id=" + filter);
+			
+			sql.append(" order by obj.id");
+	
+			list = em.createQuery(sql.toString(),Answer.class).getResultList();
+		}	
+    	return list;	
 	}
 	
 	public List<Answer> getTopAnswers() {
-		reset();
-		this.object = new Answer();
 		
-		StringBuilder sql = new StringBuilder();
-		sql.append("SELECT new edu.muniz.universeguide.model.Answer(answer.id,answer.subject,count(question.id)) ");
-		sql.append("FROM Question question join question.answer answer ");
-		sql.append("where 1=1 ");
-		
-		if(justFeedback)
-			sql.append("and question.feedback is not null ");
-		
-		sql.append("GROUP BY answer.id, answer.subject ");
-		sql.append("ORDER BY 3 desc");
-		
-		return em.createQuery(sql.toString(),Answer.class).getResultList();
+		if(list== null) {
+			reset();
+			this.object = new Answer();
+			
+			StringBuilder sql = new StringBuilder();
+			sql.append("SELECT new edu.muniz.universeguide.model.Answer(answer.id,answer.subject,count(question.id)) ");
+			sql.append("FROM Question question join question.answer answer ");
+			sql.append("where 1=1 ");
+			
+			if(justFeedback)
+				sql.append("and question.feedback is not null ");
+			
+			sql.append("GROUP BY answer.id, answer.subject ");
+			sql.append("ORDER BY 3 desc");
+			
+			list =  em.createQuery(sql.toString(),Answer.class).getResultList();
+		}	
+		return list;
 	}
 
 	public Number getCountAnswers() {

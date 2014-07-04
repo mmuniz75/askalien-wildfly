@@ -1,5 +1,7 @@
 package edu.muniz.universeguide.service;
 
+import java.util.List;
+
 import javax.annotation.Resource;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -7,6 +9,7 @@ import javax.transaction.UserTransaction;
 
 import edu.muniz.universeguide.model.Model;
 import edu.muniz.universeguide.model.Question;
+import edu.muniz.universeguide.model.Video;
 
 
 
@@ -15,6 +18,12 @@ public abstract class Service {
 	protected Model object;
 
 	protected Integer objectID;
+	
+	protected List list;
+	
+	public void resetList(){
+		list = null;
+	}
 	
 	public Integer getObjectID() {
 		return objectID;

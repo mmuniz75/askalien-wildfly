@@ -8,13 +8,13 @@ import java.util.Calendar;
 import java.util.List;
 
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.SessionScoped;
+import javax.faces.bean.RequestScoped;
 
 import edu.muniz.universeguide.model.Usage;
 
 
 @ManagedBean
-@SessionScoped
+@RequestScoped
 public class UsageService extends Service{
 	
 	public UsageService(){
@@ -33,17 +33,17 @@ public class UsageService extends Service{
 	}
 
 	public List<Usage> getUsageFromYear(){
-		reset();
+		if (list==null) {
+			reset();
+				
+			StringBuilder sql = new StringBuilder();
+			sql.append("select obj from Usage obj ");
+			sql.append("where year=" + year);
+			sql.append(" order by month");
 			
-		StringBuilder sql = new StringBuilder();
-		sql.append("select obj from Usage obj ");
-		sql.append("where year=" + year);
-		sql.append(" order by month");
-		
-		List<Usage> usages = em.createQuery(sql.toString(),Usage.class).getResultList();
-		
-		return usages;
-		
+			list = em.createQuery(sql.toString(),Usage.class).getResultList();
+		}	
+		return list;
 	}
 	
 	public List<Short> getYears(){

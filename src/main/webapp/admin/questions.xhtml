@@ -20,7 +20,9 @@
 		</ui:define>
 		
 		<ui:define name="content">
-		
+				<f:view contentType="text/html">
+					<f:event type="preRenderView" listener="#{questionService.resetList}" />
+				</f:view>
 				<h2 id="countQuestion" />
 				
 				<h:form id="formFeedBacks" style="width:95%" styleClass="searchform">
@@ -89,7 +91,7 @@
 				      </h:dataTable>
 				      <script>
 				        answer = ' <h:outputText value=" for Answer number : #{questionService.answerId}" rendered="#{questionService.answerId gt 0}" />';
-					   	document.getElementById("countQuestion").innerHTML = "#{fn:length(questionService.list)} Questions " + answer; 
+					   	document.getElementById("countQuestion").innerHTML = "#{questionService.countCurrentQuestions} Questions " + answer; 
 					   </script>
 			     </h:panelGroup>
 			  </h:panelGroup> 

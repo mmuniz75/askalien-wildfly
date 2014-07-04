@@ -17,8 +17,13 @@
     			<ui:param name="current" value="statistics"/>
 			</ui:include>
 		</ui:define>
-		
+
 		<ui:define name="content">
+		
+				<f:view contentType="text/html">
+					<f:event type="preRenderView" listener="#{questionService.resetCountList}" />
+					<f:event type="preRenderView" listener="#{countryService.resetList}" />
+				</f:view>
 				<h2>Statistics</h2>
 				
 			 	<font color="#2180BC" size="2">

@@ -2,6 +2,7 @@ package edu.muniz.universeguide.service;
 
 import java.util.List;
 
+import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 
@@ -12,7 +13,7 @@ import edu.muniz.universeguide.model.Video;
 @ManagedBean
 @SessionScoped
 public class VideoService extends Service{
-	
+		
 	public VideoService(){
 		this.object = new Video();
 	}
@@ -35,18 +36,20 @@ public class VideoService extends Service{
 		
 	}
 	
+	
 	public List<Video> getList() {
-		reset();
-		StringBuilder sql = new StringBuilder();
-		sql.append("select obj from Video obj order by number desc");
-		return em.createQuery(sql.toString(),Video.class).getResultList();
+		if(list == null){
+			reset();
+			StringBuilder sql = new StringBuilder();
+			sql.append("select obj from Video obj order by number desc");
+			list = em.createQuery(sql.toString(),Video.class).getResultList();
+		}	
+    	return list;
 	}
 
 	public void add(){
 		this.object = new Video();
 	}
-
-
 
 	public void save() {
 		Video video = (Video)this.object;

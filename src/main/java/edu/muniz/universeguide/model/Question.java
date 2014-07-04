@@ -39,8 +39,7 @@ public class Question implements Model,Serializable{
 	@Column(columnDefinition="TEXT")
 	private String feedback;
 
-	@Basic(fetch=FetchType.LAZY)
-	@ManyToOne
+	@ManyToOne(fetch=FetchType.LAZY)
 	private Answer answer;
 	
 	private Date creationDate;

@@ -20,6 +20,9 @@
 		
 		<ui:define name="content">
 				<h2>Answers</h2>
+				<f:view contentType="text/html">
+					<f:event type="preRenderView" listener="#{answerService.resetList}" />
+				</f:view>
 				<h:form id="formAnswers" style="width:95%">
 				<br/>
 				&nbsp;&nbsp;&nbsp;&nbsp;ID		

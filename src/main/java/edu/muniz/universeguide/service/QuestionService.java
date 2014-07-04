@@ -142,7 +142,15 @@ public class QuestionService extends Service{
 	
 	public void setAnswer(Integer answerID) {
 		this.object = new Answer();
-		super.setObjectID(answerID);
+		try{
+			utx.begin();
+			super.setObjectID(answerID);
+			((Answer)this.object).getVideo().getNumber();
+			utx.commit();
+		}catch(Exception ex){
+			ex.printStackTrace();
+			error = ex.getMessage();
+		}
 		
 		Question question = new Question();
 		question.setText(this.question);
@@ -163,7 +171,19 @@ public class QuestionService extends Service{
 	@Override
 	public void setObjectID(Integer objectID) {
 		this.object = new Question();
-		super.setObjectID(objectID);
+		try{
+			utx.begin();
+			super.setObjectID(objectID);
+			((Question)this.object).getAnswer().getVideo().getNumber();
+			utx.commit();
+		}catch(Exception ex){
+			ex.printStackTrace();
+			error = ex.getMessage();
+		}
+	}
+	
+	private void startObject(Integer objectID){
+		
 	}
 
 	public String getQuestion() {
@@ -191,113 +211,158 @@ public class QuestionService extends Service{
 		this.object = null;
 	}
 	
-	public List<Question> getList(){
-		StringBuilder sql = new StringBuilder("select obj from Question obj where 1=1 ");
-		if(justFeedback)
-			sql.append(" and obj.feedback is not null");
-		
-		if(answerId != null && answerId > 0)
-			sql.append(" and obj.answer.id =" + answerId);
-		
-		if(questionFilter != null && questionFilter.length() > 0)
-			sql.append(" and obj.text like '%" + questionFilter + "%'");
-		
-		if(ipFilter != null && ipFilter.length() > 0)
-			sql.append(" and obj.ip like '%" + ipFilter + "%'");
-		
-		
-		if(justThisMonth)		
-			sql.append(" and obj.creationDate >= :monthDate");
-		
-		if(startDate != null)		
-			sql.append(" and obj.creationDate >= :startDate");
-		
-		if(endDate != null)		
-			sql.append(" and obj.creationDate <= :endDate");
-						
-		sql.append(" order by creationdate desc");
-		
-		Query query = em.createQuery(sql.toString(),Question.class);
+	private long countCurrentQuestions;
 	
-		if(justThisMonth){
-			Calendar cal = Calendar.getInstance();
-			cal.set(Calendar.DATE, 1);
-			cal.set(Calendar.HOUR, 0);
-			cal.set(Calendar.MINUTE, 0);
-			cal.set(Calendar.SECOND, 0);
-			cal.set(Calendar.MILLISECOND, 0);
-			cal.set(Calendar.AM_PM, Calendar.AM);
-			query.setParameter("monthDate", cal.getTime());
+
+	
+
+	public long getCountCurrentQuestions() {
+		return countCurrentQuestions;
+	}
+
+	public void setCountCurrentQuestions(long countCurrentQuestions) {
+		this.countCurrentQuestions = countCurrentQuestions;
+	}
+
+	public List<Question> getList(){
+		
+		if(list == null) {
+			StringBuilder sql = new StringBuilder("select obj from Question obj where 1=1 ");
+			if(justFeedback)
+				sql.append(" and obj.feedback is not null");
+			
+			if(answerId != null && answerId > 0)
+				sql.append(" and obj.answer.id =" + answerId);
+			
+			if(questionFilter != null && questionFilter.length() > 0)
+				sql.append(" and obj.text like '%" + questionFilter + "%'");
+			
+			if(ipFilter != null && ipFilter.length() > 0)
+				sql.append(" and obj.ip like '%" + ipFilter + "%'");
+			
+			
+			if(justThisMonth)		
+				sql.append(" and obj.creationDate >= :monthDate");
+			
+			if(startDate != null)		
+				sql.append(" and obj.creationDate >= :startDate");
+			
+			if(endDate != null)		
+				sql.append(" and obj.creationDate <= :endDate");
+							
+			sql.append(" order by creationdate desc");
+			
+			Query query = em.createQuery(sql.toString(),Question.class);
+		
+			if(justThisMonth){
+				Calendar cal = Calendar.getInstance();
+				cal.set(Calendar.DATE, 1);
+				cal.set(Calendar.HOUR, 0);
+				cal.set(Calendar.MINUTE, 0);
+				cal.set(Calendar.SECOND, 0);
+				cal.set(Calendar.MILLISECOND, 0);
+				cal.set(Calendar.AM_PM, Calendar.AM);
+				query.setParameter("monthDate", cal.getTime());
+			}
+			
+			if(startDate != null)		
+				query.setParameter("startDate", startDate);
+			
+			if(endDate != null)		
+				query.setParameter("endDate", endDate);
+			
+			List<Question> questions = query.getResultList();  
+			
+			countCurrentQuestions = questions.size();
+			list = questions;
 		}
 		
-		if(startDate != null)		
-			query.setParameter("startDate", startDate);
-		
-		if(endDate != null)		
-			query.setParameter("endDate", endDate);
-		
-		List<Question> questions = query.getResultList();  
-			
-		return questions;
+		return list;
 	}
 	
+	
+	private Number countQuestions;
 	public Number getCountQuestions() {
-		StringBuilder sql = new StringBuilder();
-		sql.append("SELECT count(question.id) ");
-		sql.append("FROM Question question ");
-		return getCount(sql.toString());
+		if(countQuestions==null) {
+			StringBuilder sql = new StringBuilder();
+			sql.append("SELECT count(question.id) ");
+			sql.append("FROM Question question ");
+			countQuestions = getCount(sql.toString());
+		}
+		return countQuestions;
 	}
 	
-	
+	private Number countUsers;
 	public Number getCountUsers() {
-		StringBuilder sql = new StringBuilder();
-		sql.append("SELECT count(DISTINCT question.ip) ");
-		sql.append("FROM Question question ");
-			
-		return getCount(sql.toString());
+		if(countUsers==null) {
+			StringBuilder sql = new StringBuilder();
+			sql.append("SELECT count(DISTINCT question.ip) ");
+			sql.append("FROM Question question ");
+				
+			countUsers= getCount(sql.toString());
+		}
+		return countUsers;
 	}
 	
+	private Number countCountries;
 	public Number getCountCountries() {
-		StringBuilder sql = new StringBuilder();
-		sql.append("SELECT count(DISTINCT question.country) ");
-		sql.append("FROM Question question ");
-			
-		return getCount(sql.toString());
+		if (countCountries==null){
+			StringBuilder sql = new StringBuilder();
+			sql.append("SELECT count(DISTINCT question.country) ");
+			sql.append("FROM Question question ");
+				
+			countCountries = getCount(sql.toString());
+		}
+		return countCountries; 
 	}
 	
+	private List<Question> frequentUsers;
 	public List<Question> getFrequentUsers() {
-		reset();
-		this.object = new Country();
-		
-		StringBuilder sql = new StringBuilder();
-		sql.append("SELECT new edu.muniz.universeguide.model.Question(question.ip,question.country,count(question.ip)) ");
-		sql.append("where ip not in ('','x.x.x.x')");
-		sql.append("group by ip,country");
-		sql.append("having count(ip) > 10");
-		sql.append("order by 3 desc");
-		
-		return em.createQuery(sql.toString(),Question.class).getResultList();
+		if(frequentUsers==null) {
+			reset();
+			this.object = new Country();
+			
+			StringBuilder sql = new StringBuilder();
+			sql.append("SELECT new edu.muniz.universeguide.model.Question(question.ip,question.country,count(question.ip)) ");
+			sql.append("where ip not in ('','x.x.x.x')");
+			sql.append("group by ip,country");
+			sql.append("having count(ip) > 10");
+			sql.append("order by 3 desc");
+			
+			frequentUsers = em.createQuery(sql.toString(),Question.class).getResultList();
+		}
+		return frequentUsers;
 	}
 	
+	private Number countFrequentUsers; 
 	public Number getCountFrequentUsers() {
-		reset();
-		this.object = new Country();
-		
-		StringBuilder sql = new StringBuilder();
-		sql.append("select count(*) from ");
-		sql.append("(");
-		sql.append("select ip,count(ip) from question ");
-		sql.append("where ip not in ('','x.x.x.x') ");
-		sql.append("group by ip ");
-		sql.append("having count(ip) > 10 ");
-		sql.append(") ");
-		sql.append("as users");
-		
-		Number count = (Number)em.createNativeQuery(sql.toString()).getSingleResult();
-		return count;
+		if(countFrequentUsers==null) {
+			reset();
+			this.object = new Country();
+			
+			StringBuilder sql = new StringBuilder();
+			sql.append("select count(*) from ");
+			sql.append("(");
+			sql.append("select ip,count(ip) from question ");
+			sql.append("where ip not in ('','x.x.x.x') ");
+			sql.append("group by ip ");
+			sql.append("having count(ip) > 10 ");
+			sql.append(") ");
+			sql.append("as users");
+			
+			Number count = (Number)em.createNativeQuery(sql.toString()).getSingleResult();
+			countFrequentUsers = count;
+		}
+		return countFrequentUsers;
 	}
 	
 	
-	
+	public void resetCountList(){
+		countQuestions = null;
+		countUsers = null;
+		countCountries = null;
+		frequentUsers = null;
+		countFrequentUsers = null; 
+	}
 	
 }
