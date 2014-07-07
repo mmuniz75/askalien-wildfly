@@ -109,10 +109,12 @@ public class AnswerService extends Service{
 								
 				IndexingHelper indexing = LuceneHelper.getInstance(getIndexingPath());
 				
+				String content = answer.getContent().replaceAll("\\<.*?>"," ");
+				content = content.replaceAll("&nbsp;"," ");
 				if(save)
-					indexing.indexObject(answer.getId(), answer.getSubject(), answer.getContent());
+					indexing.indexObject(answer.getId(), answer.getSubject(), content);
 				else
-					indexing.updateIndexing(answer.getId(), answer.getSubject(), answer.getContent());					
+					indexing.updateIndexing(answer.getId(), answer.getSubject(), content);					
 				
 				this.object = new Answer();
 			}catch(Exception ex){

@@ -103,6 +103,13 @@ public class QuestionService extends Service{
 
 	public void setAnswerId(Integer answerId) {
 		this.answerId = answerId;
+		if(answerId==0) {
+			this.justFeedback = false;
+			this.justThisMonth = true;
+		}else{
+			this.justFeedback = false;
+			this.justThisMonth = false;
+		}	
 	}
 
 	public boolean isJustFeedback() {

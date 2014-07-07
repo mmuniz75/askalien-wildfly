@@ -52,7 +52,7 @@
 				<h:panelGroup id="panelURL" rendered="#{not empty questionService.object.answer.url}" >			
 					<p><u><a href="#{questionService.object.answer.url}" target="_blank" >See this link</a></u></p>
 				</h:panelGroup>		
-				<blockquote><p>#{questionService.object.answer.content}</p></blockquote>
+				<blockquote><p><h:outputText id="display" value="#{questionService.object.answer.content}" escape="false" /></p></blockquote>
 				
 				<p>
 				<font color="gray">

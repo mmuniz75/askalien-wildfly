@@ -4,7 +4,8 @@
    xmlns:ui="http://java.sun.com/jsf/facelets"
    xmlns:h="http://java.sun.com/jsf/html"
    xmlns:f="http://java.sun.com/jsf/core"
-   xmlns:a4j="http://richfaces.org/a4j">
+   xmlns:a4j="http://richfaces.org/a4j"
+   xmlns:p="http://primefaces.org/ui">
 
 <h:head>
 	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
@@ -47,7 +48,7 @@
 					<label>Question</label>
 					<h:inputText id="inputSubject" value="#{answerService.object.subject}" required="true" size="70" requiredMessage="Enter the question"/>
 					<label>Answer</label>
-					<h:inputTextarea id="inputAnser" value="#{answerService.object.content}" required="true" cols="60" rows="15" requiredMessage="Enter the Answer" />
+					<p:editor id="inputAnser" value="#{answerService.object.content}" required="true" cols="60" rows="15" requiredMessage="Enter the Answer" />
 					<br />	
 					<h:commandButton styleClass="button" id="saveButton" value="Create" action="#{answerService.save}" rendered="#{empty answerService.object.id}"  >
 						<f:param name="edit" value="0" includeViewParams="true" />

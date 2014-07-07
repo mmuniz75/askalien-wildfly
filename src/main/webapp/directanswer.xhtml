@@ -25,7 +25,7 @@
 				<h:panelGroup id="panelURL" rendered="#{not empty answerService.object.url}" >			
 					<p><u><a href="#{answerService.object.url}" target="_blank" >See this link</a></u></p>
 				</h:panelGroup>		
-				<blockquote><p>#{answerService.object.content}</p></blockquote>
+				<blockquote><p><h:outputText id="display" value="#{answerService.object.content}" escape="false" /></p></blockquote>
 				
 				<p>
 				<font color="gray">
