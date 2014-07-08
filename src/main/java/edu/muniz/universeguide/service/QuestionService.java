@@ -19,7 +19,10 @@ import edu.muniz.universeguide.model.Question;
 public class QuestionService extends Service{
 	
 	@Inject
-	CountryService countryService;
+	private CountryService countryService;
+	
+	@Inject
+	private AnswerService answerService;
 	
 	private String question;
 	private String ip;
@@ -135,8 +138,6 @@ public class QuestionService extends Service{
 
 	private List<Answer> answers; 
 	
-	@Inject
-	private AnswerService answerService;
 	
 	public void ask(){
 		answers = answerService.searchAnswers(question);
@@ -148,23 +149,14 @@ public class QuestionService extends Service{
 		
 	
 	public void setAnswer(Integer answerID) {
-		this.object = new Answer();
-		try{
-			utx.begin();
-			super.setObjectID(answerID);
-			((Answer)this.object).getVideo().getNumber();
-			utx.commit();
-		}catch(Exception ex){
-			ex.printStackTrace();
-			error = ex.getMessage();
-		}
+		Answer answer = answerService.getAnswerById(answerID); 
 		
 		Question question = new Question();
 		question.setText(this.question);
 		question.setIp(this.ip);
 		question.setCountry(this.country);
 		
-		question.setAnswer(new Answer((Answer)this.object));
+		question.setAnswer(answer);
 		
 		this.object = question;
 		try{
@@ -177,16 +169,16 @@ public class QuestionService extends Service{
 
 	@Override
 	public void setObjectID(Integer objectID) {
-		this.object = new Question();
-		try{
-			utx.begin();
-			super.setObjectID(objectID);
-			((Question)this.object).getAnswer().getVideo().getNumber();
-			utx.commit();
-		}catch(Exception ex){
-			ex.printStackTrace();
-			error = ex.getMessage();
-		}
+		StringBuilder sql = new StringBuilder();
+		sql.append("select obj from Question obj ");
+		sql.append("JOIN FETCH obj.answer a ");
+		sql.append("JOIN FETCH a.video ");
+		sql.append("where obj.id=" + objectID);
+		
+		List<Question> questions = em.createQuery(sql.toString(),Question.class).getResultList();
+		
+		if(questions.size()>0)
+			this.object = questions.get(0);
 	}
 	
 	private void startObject(Integer objectID){

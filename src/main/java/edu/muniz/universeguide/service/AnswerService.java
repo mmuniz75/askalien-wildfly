@@ -8,16 +8,17 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.RequestScoped;
+import javax.faces.bean.SessionScoped;
 import javax.inject.Inject;
 
 import edu.muniz.universeguide.model.Answer;
+import edu.muniz.universeguide.model.Question;
 import edu.muniz.universeguide.model.Video;
 import edu.muniz.universeguide.util.IndexingHelper;
 import edu.muniz.universeguide.util.LuceneHelper;
 
 @ManagedBean
-@RequestScoped
+@SessionScoped
 public class AnswerService extends Service{
 	
 	@Inject
@@ -62,17 +63,25 @@ public class AnswerService extends Service{
 			reset();
 			this.object = new Answer();
 		}else{
-			try{
-				utx.begin();
-				super.setObjectID(objectID);
-				((Answer)this.object).getVideo().getNumber();
-				utx.commit();
-			}catch(Exception ex){
-				ex.printStackTrace();
-				error = ex.getMessage();
-			}
+			this.object = getAnswerById(objectID);
 		}	
 		
+	}
+	
+	public Answer getAnswerById(Integer objectID){
+		StringBuilder sql = new StringBuilder();
+		sql.append("select obj from Answer obj ");
+		sql.append("JOIN FETCH obj.video ");
+		sql.append("where obj.id=" + objectID);
+		
+		List<Answer> answers = em.createQuery(sql.toString(),Answer.class).getResultList();
+		
+		Answer answer = null;
+		if(answers.size()>0)
+			answer = answers.get(0);
+
+		return answer;	
+			
 	}
 
 
