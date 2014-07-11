@@ -7,7 +7,7 @@
    >
 
 <body>
-	<ui:composition template="template/template.xhtml">
+	<ui:composition template="../template/template.xhtml">
 		<ui:define name="menu">
 		</ui:define>
 		
@@ -92,21 +92,16 @@
 <p>The Search Textbox supports modifying query terms to provide a wide range of searching options.</p>
 <a name="N10076"></a><a name="Wildcard Searches"></a>
 <h3 class="boxed">Wildcard Searches</h3>
-<p>The Search Textbox supports single and multiple character wildcard searches within single terms
+<p>The Search Textbox supports multiple character wildcard searches within single terms
         (not within phrase queries).</p>
-<p>To perform a single character wildcard search use the "?" symbol.</p>
 <p>To perform a multiple character wildcard search use the "*" symbol.</p>
-<p>The single character wildcard search looks for terms that match that 
-with the single character replaced. For example, to search for "text" or
- "test" you can use the search:</p>
-<pre class="code">te?t</pre>
 <p>Multiple character wildcard searches looks for 0 or more characters. 
 For example, to search for test, tests or tester, you can use the 
 search: </p>
 <pre class="code">test*</pre>
 <p>You can also use the wildcard searches in the middle of a term.</p>
 <pre class="code">te*t</pre>
-<p>Note: You cannot use a * or ? symbol as the first character of a search.</p>
+<p>Note: You cannot use a * symbol as the first character of a search.</p>
 <a name="N1009B"></a><a name="Fuzzy Searches"></a>
 <h3 class="boxed">Fuzzy Searches</h3>
 <p>The Search Textbox supports fuzzy searches based on the Levenshtein Distance, or 
@@ -218,7 +213,7 @@ logic for a query.</p>
 <h2 class="boxed">Escaping Special Characters</h2>
 <div class="section">
 <p>The Search Textbox supports escaping special characters that are part of the query syntax. The current list special characters are</p>
-<p>+ - &amp;&amp; || ! ( ) { } [ ] ^ " ~ * ? : \</p>
+<p>+ - &amp;&amp; || ! ( ) { } [ ] ^ " ~ * : \</p>
 <p>To escape these character use the \ before the character. For example to search for (1+1):2 use the query:</p>
 <pre class="code">\(1\+1\)\:2</pre>
 </div>

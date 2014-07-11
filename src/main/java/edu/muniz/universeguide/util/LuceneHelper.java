@@ -129,7 +129,7 @@ public class LuceneHelper implements IndexingHelper {
 			MultiFieldQueryParser parser = new MultiFieldQueryParser(Version.LUCENE_35, FIELDS,analyzer);
 			//parser.setDefaultOperator(Operator.AND);
 			
-			
+			keywords = keywords.replaceAll("\\?", " ");
 			Query query = parser.parse(keywords);
 			
 			TopDocs results = searcher.search(query, null, MAX_RESULTS);

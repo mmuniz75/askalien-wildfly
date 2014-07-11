@@ -19,14 +19,15 @@
 			<li><h:link  outcome="questions" value="List Question"><f:param name="answerId" value="0" includeViewParams="true" /></h:link></li>
 		</c:if>
 
-		<c:if test="#{current eq 'listanswers'}">
-			<li id="current"><h:link  outcome="listanswers" value="List Answers"/></li>
-		</c:if>
-		<c:if test="#{current ne 'listanswers'}">
-			<li><h:link  outcome="listanswers" value="List Answers"/></li>
-		</c:if>	
-		
 		<h:panelGroup rendered="#{facesContext.externalContext.isUserInRole('admin')}">
+			<c:if test="#{current eq 'listanswers'}">
+				<li id="current"><h:link  outcome="listanswers" value="List Answers"/></li>
+			</c:if>
+			<c:if test="#{current ne 'listanswers'}">
+				<li><h:link  outcome="listanswers" value="List Answers"/></li>
+			</c:if>	
+		
+		
 			<c:if test="#{current eq 'answer'}">
 				<li id="current"><h:link  outcome="answer" value="Create Answer"><f:param name="edit" value="0" includeViewParams="true" /></h:link></li>
 			</c:if>	
@@ -42,12 +43,14 @@
 			<li><h:link  outcome="topanswers" value="Top Answers"/></li>
 		</c:if>
 		
-		<c:if test="#{current eq 'videos'}">
-			<li id="current"><h:link  outcome="videos" value="Videos"/></li>
-		</c:if>
-		<c:if test="#{current ne 'videos'}">
-			<li><h:link  outcome="videos" value="Videos"/></li>
-		</c:if>
+		<h:panelGroup rendered="#{facesContext.externalContext.isUserInRole('admin')}">
+			<c:if test="#{current eq 'videos'}">
+				<li id="current"><h:link  outcome="videos" value="Videos"/></li>
+			</c:if>
+			<c:if test="#{current ne 'videos'}">
+				<li><h:link  outcome="videos" value="Videos"/></li>
+			</c:if>
+		</h:panelGroup>
 				
 		<c:if test="#{current eq 'statistics'}">
 			<li id="current"><h:link  outcome="statistics" value="Statistics"/></li>
