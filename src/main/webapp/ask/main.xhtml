@@ -82,15 +82,17 @@
 						<blockquote ><p ><h:outputText id="display" value="#{questionService.object.answer.content}" escape="false" /></p></blockquote>
 						
 						<p>
-						<font color="gray">
-							<i>
-							   <h:outputText value="From video #{questionService.object.answer.video.number} # " rendered="#{questionService.object.answer.video.number ge 0}" />
-							   &nbsp;-&nbsp;
-							   <h:outputText value="#{questionService.object.answer.video.creationDate}" rendered="#{not empty questionService.object.answer.video.creationDate}" >
-					   			<f:convertDateTime pattern="MM/dd/yyyy" />
-					   			</h:outputText>	
-							</i>
-						</font>
+						<h:panelGroup id="videoLink" rendered="#{questionService.object.answer.video.number ne 0}" >
+							<font color="gray">
+								<i>
+								   <h:outputText value="From video #{questionService.object.answer.video.number} # "  />
+								   &nbsp;-&nbsp;
+								   <h:outputText value="#{questionService.object.answer.video.creationDate}" rendered="#{not empty questionService.object.answer.video.creationDate}" >
+						   			<f:convertDateTime pattern="MM/dd/yyyy" />
+						   			</h:outputText>	
+								</i>
+							</font>
+						</h:panelGroup>
 						</p>
 						<h:form id="formAnswer" styleClass="searchform">	
 							<p>

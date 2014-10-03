@@ -28,15 +28,17 @@
 				<blockquote><p><h:outputText id="display" value="#{answerService.object.content}" escape="false" /></p></blockquote>
 				
 				<p>
-				<font color="gray">
-					<i>
-					   <h:outputText value="From video #{answerService.object.video.number} # " rendered="#{answerService.object.video.number ge 0}" />
-					   &nbsp;-&nbsp;
-					   <h:outputText value="#{answerService.object.video.creationDate}" rendered="#{not empty answerService.object.video.creationDate}" >
-					   		<f:convertDateTime pattern="MM/dd/yyyy" />
-					   </h:outputText>	
-					</i>
-				</font>
+				<h:panelGroup id="videoLink" rendered="#{answerService.object.video.number ne 0}" >
+					<font color="gray">
+						<i>
+						   <h:outputText value="From video #{answerService.object.video.number} # "  />
+						   &nbsp;-&nbsp;
+						   <h:outputText value="#{answerService.object.video.creationDate}" rendered="#{not empty answerService.object.video.creationDate}" >
+						   		<f:convertDateTime pattern="MM/dd/yyyy" />
+						   </h:outputText>	
+						</i>
+					</font>
+				</h:panelGroup>	
 				</p>
 				<br/><br/>
 				<div style="text-align:center">			

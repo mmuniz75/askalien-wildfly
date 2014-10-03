@@ -25,6 +25,30 @@ public class AnswerService extends Service{
 	private VideoService videoService;
 	
 	private Integer filter;
+	
+	private Integer from;
+	private Integer to;
+	
+	public Integer getFrom() {
+		return from;
+	}
+
+
+	public void setFrom(Integer from) {
+		this.from = from;
+	}
+
+
+	public Integer getTo() {
+		return to;
+	}
+
+
+	public void setTo(Integer to) {
+		this.to = to;
+	}
+
+
 	public Integer getFilter() {
 		return filter;
 	}
@@ -163,10 +187,16 @@ public class AnswerService extends Service{
 			reset();
 			this.object = new Answer();
 			StringBuilder sql = new StringBuilder();
-			sql.append("select obj from Answer obj");
+			sql.append("select obj from Answer obj where 1=1");
 			
 			if(filter!=null && filter > 0 )
-				sql.append(" where id=" + filter);
+				sql.append(" and id=" + filter);
+			
+			if(from!=null && from > 0 )
+				sql.append(" and id>=" + from);
+			
+			if(to!=null && to > 0 )
+				sql.append(" and id<=" + to);
 			
 			sql.append(" order by obj.id");
 	

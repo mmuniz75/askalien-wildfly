@@ -11,6 +11,10 @@
 </h:head>
 
 <body>
+	<f:metadata>
+		<f:viewParam name="from" value="#{answerService.from}"/>
+		<f:viewParam name="to" value="#{answerService.to}"/>
+	</f:metadata>
 	<ui:composition template="template/template.xhtml">
 		
 		<ui:define name="content">
