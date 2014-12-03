@@ -118,81 +118,22 @@
 						<br />
 					</h:panelGroup>
 				</p:dialog>
-			</h:panelGroup>		
+			</h:panelGroup>
+		
+			
 			<script>
-				
-				function getXMLHttpRequest() {
-					xmlhttp = null;
-					
-					if(window.XDomainRequest) {
-						xmlhttp = new window.XDomainRequest();
-					}else if (window.XMLHttpRequest) {
-				    	xmlhttp =  new window.XMLHttpRequest();
-				    } else {
-				        try {
-				        	xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-				        } catch(ex) {
-				        	try { 
-				        		xmlhttp = new ActiveXObject("MSXML2.XMLHTTP.3.0");
-				        	}catch(ex) {}
-				        }
-				    }
-				    
-					return xmlhttp;
-				}
-
-				var ip='x.x.x.x';
-				var country='Unknown Country';
-				function setLocations() {
-					
-			    	xmlhttp = getXMLHttpRequest();
-			    	
-				    if (xmlhttp!=null) {
-				    	try{
-					    	xmlhttp.open("GET","http://api.hostip.info/get_html.php",false);
-					    	xmlhttp.send();
-						    hostipInfo = xmlhttp.responseText.split("\n");
-				    	}catch(err){}
-				    	
-					    for (i=0; hostipInfo.length > i; i++) {
-							var ipAddress;
-					    	try{
-					    		ipAddress = hostipInfo[i].split(":");
-					    		
-							}catch(err){}
-				        	
+			 	function getip(json){
+			 		document.formAnswers.elements["formAnswers:ip"].value =json.ip; // alerts the ip address
+					document.formAnswers.elements["formAnswers:country"].value = 'Unknown Country?';
+			    }
 							
-					    	try{
-						        if ( ipAddress[0] == "IP" ) {
-						        	this.ip = ipAddress[1];
-						        }
-					        }catch(err){}
-					        
-					        try{
-						        if ( ipAddress[0] == "Country" ) {
-						        	var country = ipAddress[1];
-						        	if(country.indexOf("Unknown Country")==-1) {
-						        		var posi = country.indexOf("(");
-						        		country = country.substring(0,posi-1);
-						        	}		
-						        	this.country = country
-						     	}
-					        }catch(err){}    
-					    }
-					}    
-		
-				}
-		
-				setLocations();
-				document.formAnswers.elements["formAnswers:ip"].value = this.ip;
-				document.formAnswers.elements["formAnswers:country"].value = this.country;
-				
-												
+																
 				function changeLabel(obj){
 					obj.innerHTML = '<font color="red">Read</font>';
 				}
 				
 			</script>
+			<script type="application/javascript" src="http://jsonip.appspot.com/?callback=getip"></script>		
 		</ui:define>
 	</ui:composition>	
 </body>
