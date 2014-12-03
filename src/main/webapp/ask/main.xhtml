@@ -119,8 +119,7 @@
 					</h:panelGroup>
 				</p:dialog>
 			</h:panelGroup>
-		
-			
+	
 			<script>
 			 	function getip(json){
 			 		document.formAnswers.elements["formAnswers:ip"].value =json.ip; // alerts the ip address
@@ -131,9 +130,9 @@
 				function changeLabel(obj){
 					obj.innerHTML = '<font color="red">Read</font>';
 				}
-				
+
 			</script>
-			<script type="application/javascript" src="http://jsonip.appspot.com/?callback=getip"></script>		
+			<script type="application/javascript" src="http://www.telize.com/jsonip?callback=getip"></script>		
 		</ui:define>
 	</ui:composition>	
 </body>
