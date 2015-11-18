@@ -72,7 +72,7 @@ public class CountryService extends Service {
 			URL url = new URL("http://www.iplocationfinder.com/" + ip);
 			
 			String page = readPage(url);
-			if(page.indexOf("Unknown Country") == -1) {
+			if(page.indexOf("Unknown Country") == -1 && page.indexOf("No information found") == -1) {
 			    int starts = page.indexOf("Country");
 			    page = page.substring(starts);
 			    starts = page.indexOf("title") + 7;
