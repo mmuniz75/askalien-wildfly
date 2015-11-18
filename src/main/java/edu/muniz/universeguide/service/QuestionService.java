@@ -6,8 +6,10 @@ import java.util.List;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.persistence.Query;
+import javax.servlet.http.HttpServletRequest;
 
 import edu.muniz.universeguide.model.Answer;
 import edu.muniz.universeguide.model.Country;
@@ -319,8 +321,7 @@ public class QuestionService extends Service{
 	public List<Question> getFrequentUsers() {
 		if(frequentUsers==null) {
 			reset();
-			this.object = new Country();
-			
+						
 			StringBuilder sql = new StringBuilder();
 			sql.append("SELECT new edu.muniz.universeguide.model.Question(question.ip,question.country,count(question.ip)) ");
 			sql.append("where ip not in ('','x.x.x.x')");
@@ -337,8 +338,7 @@ public class QuestionService extends Service{
 	public Number getCountFrequentUsers() {
 		if(countFrequentUsers==null) {
 			reset();
-			this.object = new Country();
-			
+						
 			StringBuilder sql = new StringBuilder();
 			sql.append("select count(*) from ");
 			sql.append("(");
@@ -363,5 +363,23 @@ public class QuestionService extends Service{
 		frequentUsers = null;
 		countFrequentUsers = null; 
 	}
-	
+
+	public String getClientIp() {
+		HttpServletRequest request = (HttpServletRequest) (FacesContext.getCurrentInstance().getExternalContext().getRequest());
+		String ip = request.getHeader("X-Real-IP");
+		if (null != ip && !"".equals(ip.trim()) && !"unknown".equalsIgnoreCase(ip)) {
+			return ip;
+		}
+		ip = request.getHeader("X-Forwarded-For");
+		if (null != ip && !"".equals(ip.trim()) && !"unknown".equalsIgnoreCase(ip)) {
+			// get first ip from proxy ip
+			int index = ip.indexOf(',');
+			if (index != -1) {
+				return ip.substring(0, index);
+			} else {
+				return ip;
+			}
+		}
+		return request.getRemoteAddr();
+	}
 }

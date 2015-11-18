@@ -58,8 +58,7 @@
 						 		</h:column>
 				      		</h:dataTable>
 				      		<h:inputHidden id="ip" value="#{questionService.ip}" />
-				      		<h:inputHidden id="country" value="#{questionService.country}" />
-					</h:panelGroup>
+							</h:panelGroup>
 				</h:panelGroup>	
 			</h:form>
 			<br/>
@@ -121,18 +120,15 @@
 			</h:panelGroup>
 	
 			<script>
-			 	function getip(json){
-			 		document.formAnswers.elements["formAnswers:ip"].value =json.ip; // alerts the ip address
-					document.formAnswers.elements["formAnswers:country"].value = 'Unknown Country?';
-			    }
-							
+				document.formAnswers.elements["formAnswers:ip"].value = "#{questionService.clientIp}"
+				document.formAnswers.elements["formAnswers:country"].value = 'Unknown Country?';
 																
 				function changeLabel(obj){
 					obj.innerHTML = '<font color="red">Read</font>';
 				}
 
 			</script>
-			<script type="application/javascript" src="http://www.telize.com/jsonip?callback=getip"></script>		
+					
 		</ui:define>
 	</ui:composition>	
 </body>
