@@ -22,13 +22,22 @@ public class CountryService extends Service {
 			
 			if(countryObj==null){
 				country= getCountryFromIPFinder(ip);
-				persistCountry(ip, country);
+				
+				if(country.indexOf(",")>-1)
+					country = country.substring(0,country.indexOf(","));
+				
+				if(country.equals("KOREA"))
+					country = "SOUTH KOREA";
+				
+				persistCountry(ip,country);
 			}else
 				country = countryObj.getCountry(); 
 		
 		}catch(Exception ex){
 			ex.printStackTrace();
 		}
+		
+
 		
 		return country;
 	}
