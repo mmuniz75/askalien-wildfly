@@ -40,7 +40,7 @@ public class AnswerRest {
 		
 		String content = answer.getContent().replaceAll("\"", "'");
 		builder.append("\"content\":\"" + content + "\",") ;
-		builder.append("\"video\": " + answer.getVideo().getNumber()) ;
+		builder.append("\"questionId\": " + question.getId()) ;
 		builder.append("}}");
 		
 		return builder.toString();
