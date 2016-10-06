@@ -364,8 +364,17 @@ public class QuestionService extends Service{
 		countFrequentUsers = null; 
 	}
 
+	
 	public String getClientIp() {
 		HttpServletRequest request = (HttpServletRequest) (FacesContext.getCurrentInstance().getExternalContext().getRequest());
+		return getClientIp(request);
+	}
+	
+	public void setIpFromRequest(HttpServletRequest request){
+		setIp(getClientIp(request));
+	}
+	
+	private String getClientIp(HttpServletRequest request) {
 		String ip = request.getHeader("X-Real-IP");
 		if (null != ip && !"".equals(ip.trim()) && !"unknown".equalsIgnoreCase(ip)) {
 			return ip;

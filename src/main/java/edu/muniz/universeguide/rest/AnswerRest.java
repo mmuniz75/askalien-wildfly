@@ -1,10 +1,12 @@
 package edu.muniz.universeguide.rest;
 
 import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.Context;
 
 import edu.muniz.universeguide.model.Answer;
 import edu.muniz.universeguide.model.Question;
@@ -14,16 +16,17 @@ import edu.muniz.universeguide.service.QuestionService;
 @Path("/answer")
 public class AnswerRest {
 	
+		
 	@Inject
 	private QuestionService questionService;
 	
 	@GET
 	@Path("/detail")
 	@Produces({"application/json"})
-	public String getAnswer(@QueryParam("id") Integer id,@QueryParam("search") String search,@QueryParam("ip") String ip) throws Exception{
-		
+	public String getAnswer(@Context HttpServletRequest request,@QueryParam("id") Integer id,@QueryParam("search") String search) throws Exception{
+			
 		questionService.setQuestion(search);
-		questionService.setIp(ip);
+		questionService.setIpFromRequest(request);
 		questionService.setCountry("Unknown Country?");
 		questionService.setAnswer(id);
 		
@@ -34,9 +37,6 @@ public class AnswerRest {
 		builder.append("{\"answer\" : {");
 		builder.append("\"number\": \"" + answer.getId() + "\",");
 		builder.append("\"question\": \"" + answer.getSubject().replaceAll("\"", "'") + "\",") ;
-		//String content = answer.getContent().replaceAll("\\<.*?\\>", "");
-		//content = content.replaceAll("&nbsp", "");
-		//String content = answer.getContent().replaceAll("\"", "'");
 		
 		String content = answer.getContent().replaceAll("\"", "'");
 		builder.append("\"content\":\"" + content + "\",") ;
