@@ -1,5 +1,7 @@
 package edu.muniz.universeguide.rest;
 
+import java.text.SimpleDateFormat;
+
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
@@ -32,6 +34,9 @@ public class AnswerRest {
 		
 		Question question = (Question)questionService.getObject();
 		Answer answer = question.getAnswer();
+		
+		SimpleDateFormat dt1 = new SimpleDateFormat("MM/dd/yyyy");
+		String date = dt1.format(answer.getVideo().getCreationDate());
 	
 		StringBuilder builder = new StringBuilder();
 		builder.append("{\"answer\" : {");
@@ -40,7 +45,8 @@ public class AnswerRest {
 		
 		String content = answer.getContent().replaceAll("\"", "'");
 		builder.append("\"content\":\"" + content + "\",") ;
-		builder.append("\"questionId\": " + question.getId()) ;
+		builder.append("\"questionId\": " + question.getId() + ",") ;
+		builder.append("\"date\": \"" + date + "\"") ;
 		builder.append("}}");
 		
 		return builder.toString();
