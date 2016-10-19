@@ -31,7 +31,14 @@
 				</h:panelGroup>	
 				<br/><br/>	
 				<h:panelGroup id="panelResults">	
-					<font size="2" color="red"><h:messages /></font>	
+					<font size="2" color="red"><h:messages /></font>
+					
+					<h:panelGroup rendered="#{empty questionService.answers and empty questionService.question}">
+						<a href="https://play.google.com/store/apps/details?id=edu.muniz.universeguide.mobile" target="_blank" align="center">
+							<img src="../images/android_store.png" alt="Avaliable to Android" style="width:128px;height:64px;border: 0;align:center" />
+						</a>	
+					</h:panelGroup>
+						
 										
 				    <h:panelGroup rendered="#{empty questionService.answers and not empty questionService.question}">
 						<p class="post-footer align-left">					
