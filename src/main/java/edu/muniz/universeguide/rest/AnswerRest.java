@@ -16,7 +16,7 @@ import edu.muniz.universeguide.service.QuestionService;
 
 
 @Path("/answer")
-public class AnswerRest {
+public class AnswerRest extends Rest{
 	
 		
 	@Inject
@@ -26,7 +26,8 @@ public class AnswerRest {
 	@Path("/detail")
 	@Produces({"application/json"})
 	public String getAnswer(@Context HttpServletRequest request,@QueryParam("id") Integer id,@QueryParam("search") String search) throws Exception{
-			
+		allowCrossDomainAccess();
+		
 		questionService.setQuestion(search);
 		questionService.setIpFromRequest(request);
 		questionService.setCountry("Unknown Country?");

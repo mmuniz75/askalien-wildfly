@@ -17,15 +17,17 @@ import edu.muniz.universeguide.service.QuestionService;
 
 
 @Path("/question")
-public class QuestionRest {
+public class QuestionRest extends Rest{
 	
 	@Inject
 	private QuestionService questionService;
+	
 	
 	@GET
 	@Path("/ask")
 	@Produces({"application/json"})
 	public String ask(@QueryParam("question") String question) throws Exception{
+		allowCrossDomainAccess();
 		
 		questionService.setQuestion(question);
 		questionService.ask();
@@ -56,7 +58,8 @@ public class QuestionRest {
 	@Path("/feedback")
 	@Consumes("application/x-www-form-urlencoded")
 	public void feedback(@FormParam("questionId") Integer questionId,@FormParam("name") String name,@FormParam("email") String email,@FormParam("comments") String coments) throws Exception{
-			
+		allowCrossDomainAccess();
+		
 		questionService.setObjectID(questionId);
 		Question question = (Question)questionService.getObject();
 		question.setCreator(name);
