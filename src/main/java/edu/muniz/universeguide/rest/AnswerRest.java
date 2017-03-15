@@ -1,5 +1,6 @@
 package edu.muniz.universeguide.rest;
 
+import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 
 import javax.inject.Inject;
@@ -47,7 +48,9 @@ public class AnswerRest extends Rest{
 		String content = answer.getContent().replaceAll("\"", "'");
 		builder.append("\"content\":\"" + content + "\",") ;
 		builder.append("\"questionId\": " + question.getId() + ",") ;
-		builder.append("\"date\": \"" + date + "\"") ;
+		builder.append("\"date\": \"" + date + "\",") ;
+				
+		builder.append("\"link\": \"" + answer.getUrl() + "\"") ;
 		builder.append("}}");
 		
 		return builder.toString();
