@@ -1,0 +1,143 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+   xmlns:ui="http://java.sun.com/jsf/facelets"
+   xmlns:h="http://java.sun.com/jsf/html"
+   xmlns:f="http://java.sun.com/jsf/core"
+   xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+   xmlns:p="http://primefaces.org/ui"
+   >
+
+<body>
+	<ui:composition template="../template/template.xhtml">
+		<ui:define name="menu">
+		</ui:define>
+		
+		<ui:define name="content">
+	
+			<h:form id="formAnswers" styleClass="searchform" style="width:97%">
+				<h:panelGroup id="question" >
+					<h2>Search a question</h2>
+				
+						<br/>
+						<label><font color="#2180BC">Enter some words relate your interest</font></label>		
+						<h:inputText styleClass="textbox" id="inputQuestion" value="#{questionService.question}" required="true" size="50" requiredMessage="Please ask your question">
+						</h:inputText>
+						<h:commandButton styleClass="button" id="questionButton" value="Search" action="#{questionService.ask}"  >
+							<f:ajax event="keyup" render="panelResults" />
+						</h:commandButton>
+						&nbsp;<a href="queryparsersyntax.jsf" target="_blank">help</a>
+			
+				</h:panelGroup>	
+				<br/><br/>	
+				<h:panelGroup id="panelResults">	
+					<font size="2" color="red"><h:messages /></font>
+					
+					<h:panelGroup rendered="#{empty questionService.answers and empty questionService.question}">
+						<a href="https://play.google.com/store/apps/details?id=edu.muniz.universeguide.mobile" target="_blank" align="center">
+							<img src="../images/android_store.png" alt="Avaliable to Android" style="width:128px;height:64px;border: 0;align:center" />
+						</a>	
+					</h:panelGroup>
+						
+										
+				    <h:panelGroup rendered="#{empty questionService.answers and not empty questionService.question}">
+						<p class="post-footer align-left">					
+							<span class="error">We dont have a answer for your question</span>	
+						</p>				
+					</h:panelGroup>
+					
+					<h:panelGroup id="panelTabAnswers" rendered="#{not empty questionService.answers}" >					
+						<h2>Choose a question to see the answer</h2>
+						
+							<h:dataTable var="_answer" value="#{questionService.answers}" border="1"  id="tabAnwers" rowClasses="row-a,row-b" style="width:97%">
+						         <h:column>
+						            <f:facet name="header">Number</f:facet>
+						             #{_answer.id} 
+						            </h:column>
+						         <h:column>
+					        	    <f:facet name="header">Question</f:facet>
+						            #{_answer.subject}
+				        		 </h:column>
+				         		 <h:column>
+				          			<p:commandLink id="commandAnswer" value="Answer" onclick="changeLabel(this);" update=":panelAnswer" oncomplete="dialogAnswer.show();">
+				          				<f:setPropertyActionListener target="#{questionService.answer}" value="#{_answer.id}"/>
+									</p:commandLink>
+						 		</h:column>
+				      		</h:dataTable>
+				      		<h:inputHidden id="ip" value="#{questionService.ip}" />
+				      		<h:inputHidden id="country" value="#{questionService.country}" />
+							</h:panelGroup>
+				</h:panelGroup>	
+			</h:form>
+			<br/>
+			<h:panelGroup id="panelFullAnswer" >		
+				<p:dialog position="center,top" widgetVar="dialogAnswer" id="dialogAnswerId" width="700" height="700" header="Answer" modal="true" resizable="true" draggable="true"> 				
+					
+					<input type="text" maxlength="0" style="border: 0px solid"/>
+										
+					<h:panelGroup id="panelAnswer" >
+						<h3>
+							<font color="#2180BC">
+								<h:outputText id="subjectLabel" value="#{questionService.object.answer.id} - #{questionService.object.answer.subject}" />
+							</font>
+						</h3>
+						
+						<h:panelGroup id="panelURL" rendered="#{not empty questionService.object.answer.url}" >			
+							<p><u><a href="#{questionService.object.answer.url}" target="_blank" >See this link</a></u></p>
+						</h:panelGroup>
+						
+						<blockquote ><p ><h:outputText id="display" value="#{questionService.object.answer.content}" escape="false" /></p></blockquote>
+						
+						<p>
+						<h:panelGroup id="videoLink" rendered="#{questionService.object.answer.video.number ne 0}" >
+							<font color="gray">
+								<i>
+								   <h:outputText value="From video #{questionService.object.answer.video.number} # "  />
+								   &nbsp;-&nbsp;
+								   <h:outputText value="#{questionService.object.answer.video.creationDate}" rendered="#{not empty questionService.object.answer.video.creationDate}" >
+						   			<f:convertDateTime pattern="MM/dd/yyyy" />
+						   			</h:outputText>	
+								</i>
+							</font>
+						</h:panelGroup>
+						</p>
+						<h:form id="formAnswer" styleClass="searchform">	
+							<p>
+								<h:commandButton styleClass="button" id="questionButton" value="Back" onclick="dialogAnswer.hide();return false;"/>
+							</p>
+						</h:form>
+						
+						<h2>What do think about the answer ?</h2>				
+						<h:form id="formFeedback"  tabindex="-1">			
+							<p>			
+							<label>Name (optional)</label>
+							<h:inputText id="inputName" value="#{questionService.object.creator}" size="30" maxlength="50" />
+							<label>Email (optional)</label>
+							<h:inputText id="inputEmail" value="#{questionService.object.email}" size="40" maxlength="50" />
+							<label>Your Comments</label>
+							<h:inputTextarea id="inputComments" value="#{questionService.object.feedback}" required="true" cols="60" rows="5" requiredMessage="Please enter your comments" />
+							<br />	
+							<h:commandButton styleClass="button" id="feedbackButton" value="Send" action="#{questionService.sendFeedback}"  onclick="dialogAnswer.hide();">
+								<f:ajax execute="@form" />
+							</h:commandButton>	
+							</p>		
+						</h:form>				
+						<br />
+					</h:panelGroup>
+				</p:dialog>
+			</h:panelGroup>
+	
+			<script>
+				document.formAnswers.elements["formAnswers:ip"].value = "#{questionService.clientIp}"
+				document.formAnswers.elements["formAnswers:country"].value = 'Unknown Country?';
+																
+				function changeLabel(obj){
+					obj.innerHTML = '<font color="red">Read</font>';
+				}
+
+			</script>
+					
+		</ui:define>
+	</ui:composition>	
+</body>
+</html>
