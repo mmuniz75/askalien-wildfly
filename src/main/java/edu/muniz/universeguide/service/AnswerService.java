@@ -68,19 +68,20 @@ public class AnswerService extends Service{
 		this.justFeedback = justFeedback;
 	}
 
-	private static final String INDEXING_FOLDER="/FILES_INDEXING";
+	private static final String INDEXING_FOLDER="FILES_INDEXING";
 	
 	private String path;
 	private String getIndexingPath(){
 		if(this.path==null) { 
-			/*
+			
 			String path = INDEXING_FOLDER;
+			/*
 			String root = System.getenv("OPENSHIFT_DATA_DIR");
 			if(root!=null)
 				path = root + File.separator + path;
+			*/	
 			this.path = path;
-			*/
-			this.path = this.getClass().getResource(INDEXING_FOLDER).getPath();
+			
 		}
 		return this.path;
 	}
