@@ -1,0 +1,35 @@
+FROM maven:3.5.0-jdk-8-slim as builder
+
+WORKDIR ./home/maven
+
+COPY ./pom.xml .
+COPY ./src ./src
+
+RUN mvn install
+
+FROM openshift/wildfly-101-centos7
+
+EXPOSE 8080
+
+LABEL io.k8s.description="Platform for building WildFly 10.1.0.Final" \
+      io.k8s.display-name="WildFly 10.1.0.Final" \
+      io.openshift.expose-services="8080:http" \
+      io.openshift.tags="builder,wildfly,wildfly10" \
+      com.redhat.deployments-dir="/wildfly/standalone/deployments"
+
+# Add wildfly customizations
+COPY ./config/contrib/wfmodules/ /wildfly/modules/
+COPY ./config/contrib/wfbin/standalone.conf /wildfly/bin/standalone.conf
+COPY ./config/contrib/wfcfg/standalone_openshift.xml /wildfly/standalone/configuration/standalone.xml
+COPY ./config/FILES_INDEXING /opt/app-root/src/FILES_INDEXING
+COPY ./config/contrib/wfcfg/application-roles.properties /wildfly/standalone/configuration
+COPY ./config/contrib/wfcfg/application-users.properties /wildfly/standalone/configuration
+
+COPY --from=builder ./home/maven/target/mythidb-3.2.war /wildfly/standalone/deployments/ROOT.war
+
+USER 0
+
+RUN chown -R 1001:0 /opt/app-root/src/FILES_INDEXING && \
+    chmod -R ug+rw /opt/app-root/src/FILES_INDEXING
+
+CMD ["/wildfly/bin/standalone.sh", "-b", "0.0.0.0", "-bmanagement", "0.0.0.0"]
