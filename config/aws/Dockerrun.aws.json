@@ -1,0 +1,18 @@
+{
+  "AWSEBDockerrunVersion": "1",
+  "Image": {
+    "Name": "mmuniz/askalien:mythidb-v1.1",
+    "Update": "true"
+  },
+  "Ports": [
+    {
+      "ContainerPort": "8080"
+    }
+  ],
+  "Volumes": [
+    {
+      "HostDirectory": "/home/lucene",
+      "ContainerDirectory": "/opt/jboss/FILES_INDEXING"
+    }
+  ]
+}
