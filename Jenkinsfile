@@ -1,7 +1,7 @@
 node {
    def mvnHome
    stage('checkout') { // for display purposes
-      git 'https://github.com/mmuniz75/askalien-wildfly-spring.git'
+      git 'https://github.com/mmuniz75/askalien-wildfly.git'
       mvnHome = tool 'maven'
    }
    stage('package') {
