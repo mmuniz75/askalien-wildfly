@@ -1,7 +1,7 @@
 {
   "AWSEBDockerrunVersion": "1",
   "Image": {
-    "Name": "mmuniz/askalien:wildfly",
+    "Name": "mmuniz/askalien:mythi-wildfly",
     "Update": "true"
   },
   "Ports": [

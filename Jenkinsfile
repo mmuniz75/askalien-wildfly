@@ -21,12 +21,12 @@ node {
     env.PATH="${env.DOCKER_HOME}/bin:${env.PATH}"
     
     stage('Build image') {
-     sh "docker rmi mmuniz/askalien:wildfly -f || true"   
-     sh 'docker build -t mmuniz/askalien:wildfly .'
+     sh "docker rmi mmuniz/askalien:mythi-wildfly -f || true"   
+     sh 'docker build -t mmuniz/askalien:mythi-wildfly .'
     } 
     
     stage('Push image') {
-        sh 'docker push mmuniz/askalien:wildfly'
+        sh 'docker push mmuniz/askalien:mythi-wildfly'
     }   
 
     stage('Deploy on AWS') {
