@@ -1,7 +1,7 @@
 {
   "AWSEBDockerrunVersion": "1",
   "Image": {
-    "Name": "mmuniz/askalien:mythidb-v1.1",
+    "Name": "mmuniz/askalien:wildfly",
     "Update": "true"
   },
   "Ports": [
@@ -11,7 +11,7 @@
   ],
   "Volumes": [
     {
-      "HostDirectory": "/home/lucene",
+      "HostDirectory": "/efs/lucene",
       "ContainerDirectory": "/opt/jboss/FILES_INDEXING"
     }
   ]
