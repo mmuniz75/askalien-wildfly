@@ -4,7 +4,7 @@ node {
       git 'https://github.com/mmuniz75/askalien-wildfly.git'
       mvnHome = tool 'maven'
    }
-   stage('package') {
+   stage('build') {
      sh "'${mvnHome}/bin/mvn' -Dmaven.test.failure.ignore clean package"
    }
    stage('config') {
@@ -17,18 +17,12 @@ node {
      sh "sed -i -e 's|<POSTGRESQL_USER>|${env.POSTGRESQL_USER}|g' config/aws/.ebextensions/environmentvariables.config"
    }
    
-    env.DOCKER_HOME = "${tool 'docker'}"
-    env.PATH="${env.DOCKER_HOME}/bin:${env.PATH}"
-    
-    stage('Build image') {
-     sh "docker rmi mmuniz/askalien:mythi-wildfly -f || true"   
-     sh 'docker build -t mmuniz/askalien:mythi-wildfly .'
+    stage('Set AWS archive') {
+     sh "cp Dockerfile config/aws/"  
+     sh "mkdir -p config/aws/target && cp target/*.war config/aws/target/"   
+     sh 'mkdir -p config/aws/config && cp -r config/contrib config/aws/config/'
     } 
     
-    stage('Push image') {
-        sh 'docker push mmuniz/askalien:mythi-wildfly'
-    }   
-
     stage('Deploy on AWS') {
         env.PATH="/var/jenkins_home/.local/bin:${env.PATH}"
 	    sh "cd config/aws && eb deploy"
